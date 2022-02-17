@@ -2,7 +2,9 @@ apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
   name: redis
+  namespace: cluster-config
 spec:
+  targetNamespace: redis
   releaseName: redis
   chart:
     spec:
@@ -10,7 +12,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: bitnami
-        namespace: flux-system
+        namespace: cluster-config
       version: "11.3.4"
   interval: 1h0m0s
   install:

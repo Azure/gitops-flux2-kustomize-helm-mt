@@ -1,0 +1,14 @@
+apiVersion: source.toolkit.fluxcd.io/v1beta1
+kind: HelmChart
+metadata:
+  name: test-chart
+  namespace: flux-system
+  labels:
+    my-custom-label: my-custom-value
+spec:
+  chart: redis
+  interval: 1h0m0s
+  sourceRef:
+    kind: HelmRepository
+    name: bitnami
+  version: 11.3.4

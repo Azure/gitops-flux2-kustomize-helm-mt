@@ -1,8 +1,12 @@
-# flux2-kustomize-helm-example
+# gitops-flux2-kustomize-helm-mt
 
 [![test](https://github.com/fluxcd/flux2-kustomize-helm-example/workflows/test/badge.svg)](https://github.com/fluxcd/flux2-kustomize-helm-example/actions)
 [![e2e](https://github.com/fluxcd/flux2-kustomize-helm-example/workflows/e2e/badge.svg)](https://github.com/fluxcd/flux2-kustomize-helm-example/actions)
 [![license](https://img.shields.io/github/license/fluxcd/flux2-kustomize-helm-example.svg)](https://github.com/fluxcd/flux2-kustomize-helm-example/blob/main/LICENSE)
+
+This repo is a clone of the [fluxcd example repo](https://github.com/fluxcd/flux2-kustomize-helm-example) that has been updated to work with multi-tenancy. Azure GitOps enables Flux multi-tenancy by default, thus this example repo can be used for simple proof of concept following [this tutorial](https://docs.microsoft.com/azure/azure-arc/kubernetes/tutorial-use-gitops-flux2).
+
+## Original README
 
 For this example we assume a scenario with two clusters: staging and production.
 The end goal is to leverage Flux and Kustomize to manage both clusters while minimizing duplicated declarations.

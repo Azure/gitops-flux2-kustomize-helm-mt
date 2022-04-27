@@ -8,11 +8,19 @@ This repo is a clone of the [fluxcd example repo](https://github.com/fluxcd/flux
 
 ### Breaking Change Disclaimer ⚠️
 
-This repo is a tutorial repository and does not come with any guarantees pertaining to breaking changes. Version upgrades may be performed to this repository that may cause breaks on upgrades. In cases where installation of helm charts or Kubernetes manifests upgrades fail, you can may have to manually purge the releases from the cluster and allow the HelmRelease to re-reconcile the fresh install of the chart with the following commands.
+This repo is a tutorial repository and does not come with any guarantees pertaining to breaking changes. Version upgrades may be performed to this repository that may cause breaks on upgrades. In cases where installation of helm charts or Kubernetes manifests upgrades fail, you may have to manually purge the releases from the cluster and allow the HelmRelease to re-reconcile the fresh install of the chart.
 
-```
+```bash
 helm delete -n <namespace> <helm-chart-name>
 flux reconcile helmrelease -n <helmrelease-namespace> <helmrelease-name>
+```
+
+Optionally, you may also re-create the fluxConfiguration to re-deploy all of the deployed manifests from start.
+
+```bash
+az k8s-configuration flux delete -g flux-demo-rg -c flux-demo-arc -n cluster-config --namespace cluster-config -t connectedClusters
+
+az k8s-configuration flux create -g flux-demo-rg -c flux-demo-arc -n cluster-config --namespace cluster-config -t connectedClusters --scope cluster -u https://github.com/Azure/gitops-flux2-kustomize-helm-mt --branch main  --kustomization name=infra path=./infrastructure prune=true --kustomization name=apps path=./apps/staging prune=true dependsOn=["infra"]
 ```
 
 ## Original README

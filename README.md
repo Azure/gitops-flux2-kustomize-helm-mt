@@ -6,6 +6,15 @@
 
 This repo is a clone of the [fluxcd example repo](https://github.com/fluxcd/flux2-kustomize-helm-example) that has been updated to work with multi-tenancy. Azure GitOps enables Flux multi-tenancy by default, thus this example repo can be used for simple proof of concept following [this tutorial](https://docs.microsoft.com/azure/azure-arc/kubernetes/tutorial-use-gitops-flux2).
 
+### Breaking Change Disclaimer ⚠️
+
+This repo is a tutorial repository and does not come with any guarantees pertaining to breaking changes. Version upgrades may be performed to this repository that may cause breaks on upgrades. In cases where installation of helm charts or Kubernetes manifests upgrades fail, you can may have to manually purge the releases from the cluster and allow the HelmRelease to re-reconcile the fresh install of the chart with the following commands.
+
+```
+helm delete -n <namespace> <helm-chart-name>
+flux reconcile helmrelease -n <helmrelease-namespace> <helmrelease-name>
+```
+
 ## Original README
 
 For this example we assume a scenario with two clusters: staging and production.

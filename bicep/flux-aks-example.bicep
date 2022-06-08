@@ -7,7 +7,7 @@ resource managedClusters 'Microsoft.ContainerService/managedClusters@2021-08-01'
     type: 'SystemAssigned'
   }
   properties: {
-    dnsPrefix: 'my-cluster-joinnis-test-9c984f${i}'
+    dnsPrefix: 'my-cluster-9c984f${i}'
     agentPoolProfiles: [
       {
         name: 'agentpool1'

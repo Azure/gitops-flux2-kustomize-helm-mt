@@ -23,6 +23,15 @@ az k8s-configuration flux delete -g flux-demo-rg -c flux-demo-arc -n cluster-con
 az k8s-configuration flux create -g flux-demo-rg -c flux-demo-arc -n cluster-config --namespace cluster-config -t connectedClusters --scope cluster -u https://github.com/Azure/gitops-flux2-kustomize-helm-mt --branch main  --kustomization name=infra path=./infrastructure prune=true --kustomization name=apps path=./apps/staging prune=true dependsOn=["infra"]
 ```
 
+### Redhat Openshift Setup
+
+[Redhat Openshift](https://www.redhat.com/en/technologies/cloud-computing/openshift) clusters impose [security context constraints](https://docs.openshift.com/container-platform/4.6/authentication/managing-security-context-constraints.html) on all containers that run on the Kubernetes cluster. For all containers in the example application to run, you will need to add the following SCCs to your cluster
+
+```bash
+oc adm policy add-scc-to-user privileged system:serviceaccount:nginx:nginx-nginx-nginx-ingress-controller
+oc adm policy add-scc-to-user nonroot system:serviceaccount:redis:default
+```
+
 ## Original README
 
 For this example we assume a scenario with two clusters: staging and production.

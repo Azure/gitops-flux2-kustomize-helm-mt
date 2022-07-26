@@ -4,6 +4,12 @@ usePassword: false
 cluster:
   enabled: false
 master:
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
   persistence:
     enabled: false
 replica:

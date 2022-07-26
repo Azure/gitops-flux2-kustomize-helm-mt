@@ -19,3 +19,8 @@ replica:
 
 volumePermissions:
   enabled: true
+  runAsUser: 1001
+
+sentinel:
+  enabled: true
+  debug: true

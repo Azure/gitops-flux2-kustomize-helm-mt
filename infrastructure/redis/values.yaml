@@ -4,29 +4,8 @@ usePassword: false
 cluster:
   enabled: false
 master:
-  podSecurityContext:
-    enabled: true
-    fsGroup: 1001
-  containerSecurityContext:
-    enabled: true
-    runAsUser: 1001
   persistence:
     enabled: false
-replica:
-  podSecurityContext:
-    enabled: true
-    fsGroup: 1001
-    runAsUser: 1001
-
-  containerSecurityContext:
-    enabled: true
-    fsGroup: 1001
-    runAsUser: 1001
 
 volumePermissions:
   enabled: true
-  runAsUser: 1001
-
-sentinel:
-  enabled: true
-  debug: true

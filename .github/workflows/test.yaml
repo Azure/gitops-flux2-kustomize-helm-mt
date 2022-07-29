@@ -15,5 +15,7 @@ jobs:
         uses: actions/checkout@v2
       - name: Setup tools
         uses: ./.github/actions/tools
+      - name: Make executeable
+        run: chmod +x ./scripts/validate.sh
       - name: Validate manifests
         run: ./scripts/validate.sh

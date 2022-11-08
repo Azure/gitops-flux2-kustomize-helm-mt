@@ -12,5 +12,5 @@ spec:
       hosts:
         - host: podinfo.production
           paths:
-            - path: /
+            - path: /production
               pathType: ImplementationSpecific

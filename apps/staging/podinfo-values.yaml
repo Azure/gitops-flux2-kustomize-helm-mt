@@ -11,6 +11,8 @@ spec:
     enable: false
   values:
     ingress:
+      annotations:
+        kubernetes.io/ingress.class: azure/application-gateway
       hosts:
         - host: podinfo.staging
           paths:

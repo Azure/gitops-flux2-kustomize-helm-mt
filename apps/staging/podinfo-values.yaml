@@ -17,4 +17,9 @@ spec:
       hosts:
         - paths:
             - path: /
+              backend:
+                service:
+                  name:  nginx-ingress-controller
+                  port:
+                    number: 80
               pathType: Exact

@@ -8,14 +8,4 @@ spec:
     spec:
       version: "6.2.3"
   test:
-    enable: false
-  values:
-    ingress:
-      className: azure/application-gateway
-      annotations: 
-        appgw.ingress.kubernetes.io/rewrite-rule-set: rr-cecabf5835a0ee1ae3ffec58ef475c20
-      hosts:
-        - paths:
-            - path: /
-              backend:
-              pathType: Exact
+    enable: true

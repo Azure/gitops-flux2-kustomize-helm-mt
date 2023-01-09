@@ -11,8 +11,10 @@ spec:
     enable: false
   values:
     ingress:
+      enabled: true
       className: azure/application-gateway
       annotations: 
+        kubernetes.io/ingress.class: azure/application-gateway              
         appgw.ingress.kubernetes.io/rewrite-rule-set: rr-cecabf5835a0ee1ae3ffec58ef475c20
       hosts:
         - paths:

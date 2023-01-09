@@ -4,3 +4,4 @@ namespace: cluster-config
 resources:
   - bitnami.yaml
   - podinfo.yaml
+  - azure-marketplace.yaml

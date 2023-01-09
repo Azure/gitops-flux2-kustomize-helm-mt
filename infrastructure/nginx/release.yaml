@@ -11,9 +11,9 @@ spec:
       chart: nginx-ingress-controller
       sourceRef:
         kind: HelmRepository
-        name: nginx #bitnami
+        name: azure-marketplace #bitnami
+        url: https://marketplace.azurecr.io/helm/v1/repo
         namespace: cluster-config
-        url: https://helm.nginx.com/stable
       version: "latest"
   interval: 1h0m0s
   install:

@@ -5,3 +5,4 @@ resources:
   - bitnami.yaml
   - podinfo.yaml
   - azure-marketplace.yaml
+  - kubernetes-stable.yaml

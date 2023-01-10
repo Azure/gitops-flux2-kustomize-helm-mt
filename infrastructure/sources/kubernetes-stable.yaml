@@ -1,7 +1,7 @@
 apiVersion: source.toolkit.fluxcd.io/v1beta1
 kind: HelmRepository
 metadata:
-  name: k8sstable
+  name: stable
 spec:
   interval: 30m
   url: https://kubernetes-charts.storage.googleapis.com

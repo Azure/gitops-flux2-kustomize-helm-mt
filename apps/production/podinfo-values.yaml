@@ -14,7 +14,7 @@ spec:
       # className: "azure\/application-gateway"
       annotations:
         kubernetes.io/ingress.class: "azure/application-gateway"
-        appgw.ingress.kubernetes.io/rewrite-rule-set: rr-cecabf5835a0ee1ae3ffec58ef475c20
+        appgw.ingress.kubernetes.io/rewrite-rule-set: rr-e1903c8aa3446b7b3207aec6d6ecba8a
       hosts:
         - paths:
             - path: /

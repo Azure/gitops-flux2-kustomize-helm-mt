@@ -8,4 +8,4 @@ master:
     enabled: false
 
 volumePermissions:
-  enabled: true
+  enabled: false

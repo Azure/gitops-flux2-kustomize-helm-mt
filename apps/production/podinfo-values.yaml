@@ -17,10 +17,13 @@ spec:
         # appgw.ingress.kubernetes.io/rewrite-rule-set: rr-e1903c8aa3446b7b3207aec6d6ecba8a
       hosts:
         - hosts: podinfo.production
+          # paths:
+          #   - path: /
+          #     backend:
+          #       name: podinfo
+          #       port:
+          #         number: 8989
+          #     pathType: Exact
           paths:
             - path: /
-              backend:
-                name: podinfo
-                port:
-                  number: 8989
-              pathType: Exact
+              pathType: ImplementationSpecific          

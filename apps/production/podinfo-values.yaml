@@ -6,20 +6,20 @@ metadata:
 spec:
   chart:
     spec:
-      version: "6.2.3"
+      version: "6.3.2"
   test:
     enable: false
   values:
     ingress:
-      # className: "azure\/application-gateway"
       annotations:
-        kubernetes.io/ingress.class: azure/application-gateway
-        # appgw.ingress.kubernetes.io/rewrite-rule-set: rr-e1903c8aa3446b7b3207aec6d6ecba8a
+        kubernetes.io/ingress.class: addon-http-application-routing
       hosts:
-        - paths:
-            - path: /
-              backend:
+        - host: podinfoproduction.insiders-c-insiders-cafe-ar-cd7514-15d73cad.hcp.westeurope.azmk8s.io
+          paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
                 name: podinfo
                 port:
-                  number: 80
-              pathType: Exact
+                  number: 80          

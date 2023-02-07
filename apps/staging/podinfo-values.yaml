@@ -8,7 +8,9 @@ spec:
     spec:
       version: "6.2.2"
   values:
-      ingress:
-        enabled: true
-        annotations:
-          kubernetes.io/ingress.class: nginx
+    ingress:
+      hosts:
+        - host: podinfo.staging
+          paths:
+            - path: /
+              pathType: ImplementationSpecific

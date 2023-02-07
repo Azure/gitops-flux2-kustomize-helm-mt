@@ -16,10 +16,11 @@ spec:
         kubernetes.io/ingress.class: azure/application-gateway
         # appgw.ingress.kubernetes.io/rewrite-rule-set: rr-e1903c8aa3446b7b3207aec6d6ecba8a
       hosts:
-        - paths:
+        - hosts: podinfo.production
+          paths:
             - path: /
               backend:
                 name: podinfo
                 port:
-                  number: 80
+                  number: 8989
               pathType: Exact

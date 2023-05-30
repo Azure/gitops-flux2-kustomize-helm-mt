@@ -12,8 +12,7 @@ spec:
   values:
     ingress:
       annotations:
-        # kubernetes.io/ingress.class: azure/application-gateway
-        # appgw.ingress.kubernetes.io/rewrite-rule-set: rr-e1903c8aa3446b7b3207aec6d6ecba8a
+        # kubernetes.io/ingress.class: addon-http-application-routing
         kubernetes.io/ingress.class: addon-http-application-routing
       hosts:
         - host: podinfoproduction.insiders-c-insiders-cafe-ar-cd7514-15d73cad.hcp.westeurope.azmk8s.io

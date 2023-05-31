@@ -20,9 +20,9 @@ permissions:
 
 jobs:
   deploy:
-    name: Deploy
+    name: Deploy AWS EKS
     runs-on: ubuntu-latest
-    environment: production
+    # environment: production
 
     steps:
     - name: Checkout
@@ -42,7 +42,7 @@ jobs:
       uses: moia-oss/setup-eksctl@v1
         
     - name: Create EKS cluster with eksctl
-      run: echo $PATH
+      run: eksctl create cluster
 
     - name: Setup kubectl
       id: setup-kubectl
@@ -74,5 +74,5 @@ jobs:
 #       with:
 #         task-definition: ${{ steps.task-def.outputs.task-definition }}
 #         service: ${{ env.ECS_SERVICE }}
-        cluster: ${{ env.ECS_CLUSTER }}
-        wait-for-service-stability: true
+        # cluster: ${{ env.ECS_CLUSTER }}
+        # wait-for-service-stability: true

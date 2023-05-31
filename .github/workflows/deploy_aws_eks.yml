@@ -37,9 +37,8 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ env.AWS_REGION }}
 
-    - uses: actions/setup-node@v3
-      with:
-        node-version: 16
+    - name: Tool Cache
+      uses: AnimMouse/tool-cache@v1
 
     - name: Setup eksctl
       id: setup-eksctl

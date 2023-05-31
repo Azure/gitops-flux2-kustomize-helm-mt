@@ -41,7 +41,6 @@ jobs:
       uses: moia-oss/setup-eksctl@v1
         
     - name: Create EKS cluster with eksctl
-      id: create-eks
       run: eksctl create cluster
 
     - name: Setup kubectl

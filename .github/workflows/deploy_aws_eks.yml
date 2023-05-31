@@ -37,16 +37,11 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ env.AWS_REGION }}
 
-    - name: Tool Cache
-      uses: AnimMouse/tool-cache@v1
-
     - name: Setup eksctl
       id: setup-eksctl
-      uses: robatwave/github-action-eksctl@0.1.2
-      with:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        AWS_DEFAULT_REGION: ${{ env.AWS_REGION }}   
+      run: |
+        curl https://github.com/weaveworks/eksctl/releases/download/v0.143.0/eksctl_Linux_amd64.tar.gz | tar xz
+        mv ./eksctl /usr/local/bin
         
     - name: Create EKS cluster with eksctl
       run: eksctl create cluster

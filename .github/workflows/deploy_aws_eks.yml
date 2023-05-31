@@ -37,10 +37,13 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ env.AWS_REGION }}
 
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 16
+
     - name: Setup eksctl
       id: setup-eksctl
       uses: thiagomoreirac/setup-eksctl@v2.2.1
-
         
     - name: Create EKS cluster with eksctl
       run: eksctl create cluster

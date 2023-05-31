@@ -42,7 +42,11 @@ jobs:
 
     - name: Setup eksctl
       id: setup-eksctl
-      uses: moia-oss/setup-eksctl@v2
+      uses: robatwave/github-action-eksctl@0.1.2
+      with:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: ${{ env.AWS_REGION }}   
         
     - name: Create EKS cluster with eksctl
       run: eksctl create cluster

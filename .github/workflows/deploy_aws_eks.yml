@@ -42,7 +42,7 @@ jobs:
       uses: moia-oss/setup-eksctl@v1
         
     - name: Create EKS cluster with eksctl
-      run: eksctl create cluster
+      run: echo $PATH
 
     - name: Setup kubectl
       id: setup-kubectl

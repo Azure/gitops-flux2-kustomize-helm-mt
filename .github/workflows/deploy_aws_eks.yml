@@ -39,7 +39,7 @@ jobs:
 
     - name: Setup eksctl
       id: setup-eksctl
-      uses: moia-oss/setup-eksctl@v1
+      uses: moia-oss/setup-eksctl@v2.2.0
         
     - name: Create EKS cluster with eksctl
       run: eksctl create cluster

@@ -42,7 +42,7 @@ jobs:
         
     - name: Create EKS cluster with eksctl
       id: create-eks
-      run: eks-create-cluster
+      run: eksctl create cluster
 
     - name: Setup kubectl
       id: setup-kubectl

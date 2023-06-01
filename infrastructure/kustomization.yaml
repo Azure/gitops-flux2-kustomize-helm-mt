@@ -3,4 +3,4 @@ kind: Kustomization
 resources:
   - sources
   - nginx
-  - redis
+  # - redis

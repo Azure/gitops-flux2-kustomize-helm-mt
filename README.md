@@ -1,10 +1,10 @@
-# gitops-flux2-kustomize-helm-mt
+# gitops-flux2-kustomize-helm-demo
 
 [![test](https://github.com/fluxcd/flux2-kustomize-helm-example/workflows/test/badge.svg)](https://github.com/fluxcd/flux2-kustomize-helm-example/actions)
 [![e2e](https://github.com/fluxcd/flux2-kustomize-helm-example/workflows/e2e/badge.svg)](https://github.com/fluxcd/flux2-kustomize-helm-example/actions)
 [![license](https://img.shields.io/github/license/fluxcd/flux2-kustomize-helm-example.svg)](https://github.com/fluxcd/flux2-kustomize-helm-example/blob/main/LICENSE)
 
-This repo is a clone of the [fluxcd example repo](https://github.com/fluxcd/flux2-kustomize-helm-example) that has been updated to work with multi-tenancy. Azure GitOps enables Flux multi-tenancy by default, thus this example repo can be used for simple proof of concept following [this tutorial](https://docs.microsoft.com/azure/azure-arc/kubernetes/tutorial-use-gitops-flux2).
+This repo is a clone of [fluxcd example custom by Microsoft repo](https://github.com/Azure/gitops-flux2-kustomize-helm-mt), which is a clone of the [fluxcd example repo](https://github.com/fluxcd/flux2-kustomize-helm-example) that has been updated to work with multi-tenancy. Azure GitOps enables Flux multi-tenancy by default, thus this example repo can be used for simple proof of concept following [this tutorial](https://docs.microsoft.com/azure/azure-arc/kubernetes/tutorial-use-gitops-flux2).
 
 ### Breaking Change Disclaimer ⚠️
 
@@ -52,17 +52,9 @@ In order to follow the guide you'll need a GitHub account and a
 [personal access token](https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line)
 that can create repositories (check all permissions under `repo`).
 
-Install the Flux CLI on MacOS and Linux using Homebrew:
+You will need an Azure subscription. 
 
-```sh
-brew install fluxcd/tap/flux
-```
 
-Or install the CLI by downloading precompiled binaries using a Bash script:
-
-```sh
-curl -s https://fluxcd.io/install.sh | sudo bash
-```
 
 ## Repository structure
 
@@ -75,22 +67,20 @@ The Git repository contains the following top directories:
 ```
 ├── apps
 │   ├── base
-│   ├── production 
-│   └── staging
+│   ├── lb 
+│   └── appgw
 ├── infrastructure
-│   ├── nginx
-│   ├── redis
-│   └── sources
-└── clusters
-    ├── production
-    └── staging
+    ├── nginx
+    ├── redis
+    └── sources
+
 ```
 
 The apps configuration is structured into:
 
 - **apps/base/** dir contains namespaces and Helm release definitions
-- **apps/production/** dir contains the production Helm release values
-- **apps/staging/** dir contains the staging values
+- **apps/lb/** dir contains a type of env Helm release values
+- **apps/appfw/** dir contains a type of env (with application gateway) values
 
 ```
 ./apps/
@@ -99,10 +89,10 @@ The apps configuration is structured into:
 │       ├── kustomization.yaml
 │       ├── namespace.yaml
 │       └── release.yaml
-├── production
+├── lb
 │   ├── kustomization.yaml
 │   └── podinfo-patch.yaml
-└── staging
+└── appgw
     ├── kustomization.yaml
     └── podinfo-patch.yaml
 ```
@@ -133,7 +123,7 @@ spec:
         kubernetes.io/ingress.class: nginx
 ```
 
-In **apps/staging/** dir we have a Kustomize patch with the staging specific values:
+In **apps/lb/** dir we have a Kustomize patch with specific values:
 
 ```yaml
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
@@ -155,7 +145,7 @@ spec:
 Note that with ` version: ">=1.0.0-alpha"` we configure Flux to automatically upgrade
 the `HelmRelease` to the latest chart version including alpha, beta and pre-releases.
 
-In **apps/production/** dir we have a Kustomize patch with the production specific values:
+In **apps/appgw/** dir we have a Kustomize patch with the production specific values:
 
 ```yaml
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
@@ -558,3 +548,148 @@ This repository contains the following GitHub CI workflows:
 
 * the [test](./.github/workflows/test.yaml) workflow validates the Kubernetes manifests and Kustomize overlays with [kubeconform](https://github.com/yannh/kubeconform)
 * the [e2e](./.github/workflows/e2e.yaml) workflow starts a Kubernetes cluster in CI and tests the staging setup by running Flux in Kubernetes Kind
+
+
+
+## MultiCloud Environment
+
+### AWS EKS
+We use [eksctl](https://eksctl.io/) to create the EKS cluster. 
+
+* Create a new IAM user that will be used by the eksctl and flux (retrieve its AWS account ID).
+* Create a new IAM Custom Policy "eksctl-custom-policy" to allow eksctl and flux with the following IAM Policy JSON (replace with the AWS Account ID): 
+
+```json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "iam:CreateInstanceProfile",
+                "iam:DeleteInstanceProfile",
+                "iam:GetRole",
+                "iam:GetInstanceProfile",
+                "iam:RemoveRoleFromInstanceProfile",
+                "iam:CreateRole",
+                "iam:DeleteRole",
+                "iam:AttachRolePolicy",
+                "iam:PutRolePolicy",
+                "iam:ListInstanceProfiles",
+                "iam:AddRoleToInstanceProfile",
+                "iam:ListInstanceProfilesForRole",
+                "iam:PassRole",
+                "iam:DetachRolePolicy",
+                "iam:DeleteRolePolicy",
+                "iam:GetRolePolicy",
+                "iam:DeleteServiceLinkedRole",
+                "iam:CreateServiceLinkedRole",
+                "iam:GetOpenIDConnectProvider"
+            ],
+            "Resource": [
+                "arn:aws:iam::<AWS-account-ID>:instance-profile/eksctl-*",
+                "arn:aws:iam::<AWS-account-ID>:role/eksctl-*",
+                "arn:aws:iam::<AWS-account-ID>:oidc-provider/oidc.eks.*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": "cloudformation:*",
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "eks:*"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "elasticloadbalancing:*"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "autoscaling:DescribeAutoScalingGroups",
+                "autoscaling:DescribeLaunchConfigurations",
+                "autoscaling:DescribeScalingActivities",
+                "autoscaling:CreateLaunchConfiguration",
+                "autoscaling:DeleteLaunchConfiguration",
+                "autoscaling:UpdateAutoScalingGroup",
+                "autoscaling:DeleteAutoScalingGroup",
+                "autoscaling:CreateAutoScalingGroup"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": "ec2:DeleteInternetGateway",
+            "Resource": "arn:aws:ec2:*:*:internet-gateway/*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "ec2:AuthorizeSecurityGroupIngress",
+                "ec2:DeleteSubnet",
+                "ec2:DeleteTags",
+                "ec2:CreateNatGateway",
+                "ec2:CreateVpc",
+                "ec2:AttachInternetGateway",
+                "ec2:DescribeVpcAttribute",
+                "ec2:DeleteRouteTable",
+                "ec2:AssociateRouteTable",
+                "ec2:DescribeInternetGateways",
+                "ec2:CreateRoute",
+                "ec2:CreateInternetGateway",
+                "ec2:RevokeSecurityGroupEgress",
+                "ec2:CreateSecurityGroup",
+                "ec2:ModifyVpcAttribute",
+                "ec2:DeleteInternetGateway",
+                "ec2:DescribeRouteTables",
+                "ec2:ReleaseAddress",
+                "ec2:AuthorizeSecurityGroupEgress",
+                "ec2:DescribeTags",
+                "ec2:CreateTags",
+                "ec2:DeleteRoute",
+                "ec2:CreateRouteTable",
+                "ec2:DetachInternetGateway",
+                "ec2:DescribeNatGateways",
+                "ec2:DisassociateRouteTable",
+                "ec2:AllocateAddress",
+                "ec2:DescribeSecurityGroups",
+                "ec2:RevokeSecurityGroupIngress",
+                "ec2:DeleteSecurityGroup",
+                "ec2:DeleteNatGateway",
+                "ec2:DeleteVpc",
+                "ec2:CreateSubnet",
+                "ec2:DescribeSubnets",
+                "ec2:DescribeAvailabilityZones",
+                "ec2:DescribeImages",
+                "ec2:describeAddresses",
+                "ec2:DescribeVpcs",
+                "ec2:CreateLaunchTemplate",
+                "ec2:DescribeLaunchTemplates",
+                "ec2:RunInstances",
+                "ec2:DeleteLaunchTemplate",
+                "ec2:DescribeLaunchTemplateVersions",
+                "ec2:DescribeImageAttribute",
+                "ec2:DescribeKeyPairs",
+                "ec2:ImportKeyPair"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
+```
+* Attach AWS managed policies and custom policies described [here](https://eksctl.io/usage/minimum-iam-policies/).
+* 
+* Attach the existing policy *eksctl-custom-policy* to the IAM user.
+
+* Create the EKS cluster with (eks-cluster.yaml)
+```bash
+eksctl create cluster -f eks-cluster.yaml
+```

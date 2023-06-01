@@ -13,7 +13,7 @@ spec:
       annotations:
         kubernetes.io/ingress.class: nginx    
       hosts:
-        - host: podinfo.lb
+        - host: 
           paths:
           - path: /
             pathType: Prefix

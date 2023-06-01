@@ -13,7 +13,7 @@ spec:
     # ingress:
     #   annotations:
         # kubernetes.io/ingress.class: addon-http-application-routing
-    cache: redis-master.redis:6379
+    # cache: redis-master.redis:6379
     ingress:
       enabled: true
       annotations:

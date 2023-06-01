@@ -14,9 +14,9 @@ spec:
     #   annotations:
         # kubernetes.io/ingress.class: addon-http-application-routing
     # cache: redis-master.redis:6379
-    color: yellow
+    color: blue
     ui:
-      color: yellow
+      color: blue
     ingress:
       enabled: true
       annotations:

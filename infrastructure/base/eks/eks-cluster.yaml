@@ -1,0 +1,102 @@
+---
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: eks-demo
+  region: eu-west-3
+
+nodeGroups:
+  - name: eks-ec2-linux-nodes
+    instanceType: t3.medium
+    desiredCapacity: 2
+    minSize: 2
+    maxSize: 8
+    volumeSize: 50
+    volumeType: gp2
+    ssh: # import public key from file
+      allow: true
+      publicKeyPath: ~/.ssh/id_rsa.pub
+    tags:
+      # EC2 tags required for cluster-autoscaler auto-discovery
+      k8s.io/cluster-autoscaler/enabled: "true"
+      k8s.io/cluster-autoscaler/cluster-13: "owned"
+    iam:
+      withAddonPolicies:
+        ebs: true
+        fsx: true
+        efs: true
+        autoScaler: true
+        externalDNS: true
+        certManager: true
+        awsLoadBalancerController: true
+
+iam:
+  withOIDC: true
+  serviceAccounts:
+  - metadata:
+      name: aws-load-balancer-controller
+      namespace: kube-system
+    wellKnownPolicies:
+      awsLoadBalancerController: true
+  - metadata:
+      name: ebs-csi-controller-sa
+      namespace: kube-system
+    wellKnownPolicies:
+      ebsCSIController: true
+  - metadata:
+      name: efs-csi-controller-sa
+      namespace: kube-system
+    wellKnownPolicies:
+      efsCSIController: true
+  - metadata:
+      name: external-dns
+      namespace: kube-system
+    wellKnownPolicies:
+      externalDNS: true
+  - metadata:
+      name: cert-manager
+      namespace: cert-manager
+    wellKnownPolicies:
+      certManager: true
+  - metadata:
+      name: cluster-autoscaler
+      namespace: kube-system
+      labels: {aws-usage: "cluster-ops"}
+    wellKnownPolicies:
+      autoScaler: true
+  - metadata:
+      name: autoscaler-service
+      namespace: kube-system
+    attachPolicy: # inline policy can be defined along with `attachPolicyARNs`
+      Version: "2012-10-17"
+      Statement:
+      - Effect: Allow
+        Action:
+        - "autoscaling:DescribeAutoScalingGroups"
+        - "autoscaling:DescribeAutoScalingInstances"
+        - "autoscaling:DescribeLaunchConfigurations"
+        - "autoscaling:DescribeTags"
+        - "autoscaling:SetDesiredCapacity"
+        - "autoscaling:TerminateInstanceInAutoScalingGroup"
+        - "ec2:DescribeLaunchTemplateVersions"
+        Resource: '*'
+
+vpc:
+  clusterEndpoints:
+    publicAccess: true
+    privateAccess: false
+  nat:
+    gateway: Single
+
+addons:
+- name: vpc-cni # no version is specified so it deploys the default version
+  attachPolicyARNs:
+    - arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
+- name: coredns
+  version: latest # auto discovers the latest available
+- name: kube-proxy
+  version: latest
+- name: aws-ebs-csi-driver
+  wellKnownPolicies:      # add IAM and service account
+    ebsCSIController: true

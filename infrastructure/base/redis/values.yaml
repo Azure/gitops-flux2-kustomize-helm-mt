@@ -9,6 +9,6 @@ master:
 replica:
   persistence:
     enabled: false
-    
+
 volumePermissions:
   enabled: false

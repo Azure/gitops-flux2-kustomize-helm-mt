@@ -10,12 +10,21 @@ spec:
   values:
     ingress:
       hosts:
-        - host: 
+         - host: podinfo.lb
           paths:
-            - path: /
-              pathType: ImplementationSpecific
+          - path: /
+            pathType: Prefix
             backend:
               service:
                 name: podinfo
                 port:
-                  number: 80
+                  number: 80    
+        # - host: 
+        #   paths:
+        #     - path: /
+        #       pathType: ImplementationSpecific
+        #     backend:
+        #       service:
+        #         name: podinfo
+        #         port:
+        #           number: 80

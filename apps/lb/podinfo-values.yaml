@@ -8,9 +8,9 @@ spec:
     spec:
       version: "6.3.5"
   values:
-    color: blue
-    ui:
-      color: blue
+    # color: blue
+    # ui:
+    #   color: blue
     ingress:
       enabled: true
       annotations:

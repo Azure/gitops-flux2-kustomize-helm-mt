@@ -6,11 +6,11 @@ metadata:
 spec:
   chart:
     spec:
-      version: "6.3.5"
+      version: "6.3.6"
   values:
-    # color: blue
-    # ui:
-      # color: blue
+    color: blue
+    ui:
+      color: blue
     ingress:
       enabled: true
       annotations:

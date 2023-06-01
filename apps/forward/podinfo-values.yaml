@@ -10,7 +10,12 @@ spec:
   values:
     ingress:
       hosts:
-        - host: podinfo.staging
+        - host: 
           paths:
             - path: /
               pathType: ImplementationSpecific
+            backend:
+              service:
+                name: podinfo
+                port:
+                  number: 80

@@ -14,7 +14,7 @@ spec:
       annotations:
         kubernetes.io/ingress.class: addon-http-application-routing
       hosts:
-        - host: podinfoproduction.insiders-c-insiders-cafe-ar-cd7514-15d73cad.hcp.westeurope.azmk8s.io
+        - host: podinfo.appgw
           paths:
           - path: /
             pathType: Prefix

@@ -10,9 +10,14 @@ spec:
   test:
     enable: false
   values:
+    # ingress:
+    #   annotations:
+        # kubernetes.io/ingress.class: addon-http-application-routing
+    cache: redis-master.redis:6379
     ingress:
+      enabled: true
       annotations:
-        kubernetes.io/ingress.class: addon-http-application-routing
+        kubernetes.io/ingress.class: nginx
       hosts:
         - host: podinfo.appgw
           paths:

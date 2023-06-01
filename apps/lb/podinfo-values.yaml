@@ -9,6 +9,9 @@ spec:
       version: "6.3.2"
   values:
     ingress:
+      enabled: true
+      annotations:
+        kubernetes.io/ingress.class: nginx    
       hosts:
         - host: podinfo.lb
           paths:

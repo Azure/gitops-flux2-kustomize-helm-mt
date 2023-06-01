@@ -52,17 +52,9 @@ In order to follow the guide you'll need a GitHub account and a
 [personal access token](https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line)
 that can create repositories (check all permissions under `repo`).
 
-Install the Flux CLI on MacOS and Linux using Homebrew:
+You will need an Azure subscription. 
 
-```sh
-brew install fluxcd/tap/flux
-```
 
-Or install the CLI by downloading precompiled binaries using a Bash script:
-
-```sh
-curl -s https://fluxcd.io/install.sh | sudo bash
-```
 
 ## Repository structure
 
@@ -75,22 +67,20 @@ The Git repository contains the following top directories:
 ```
 ├── apps
 │   ├── base
-│   ├── production 
-│   └── staging
+│   ├── lb 
+│   └── appgw
 ├── infrastructure
-│   ├── nginx
-│   ├── redis
-│   └── sources
-└── clusters
-    ├── production
-    └── staging
+    ├── nginx
+    ├── redis
+    └── sources
+
 ```
 
 The apps configuration is structured into:
 
 - **apps/base/** dir contains namespaces and Helm release definitions
-- **apps/production/** dir contains the production Helm release values
-- **apps/staging/** dir contains the staging values
+- **apps/lb/** dir contains a type of env Helm release values
+- **apps/appfw/** dir contains a type of env (with application gateway) values
 
 ```
 ./apps/
@@ -99,10 +89,10 @@ The apps configuration is structured into:
 │       ├── kustomization.yaml
 │       ├── namespace.yaml
 │       └── release.yaml
-├── production
+├── lb
 │   ├── kustomization.yaml
 │   └── podinfo-patch.yaml
-└── staging
+└── appgw
     ├── kustomization.yaml
     └── podinfo-patch.yaml
 ```
@@ -133,7 +123,7 @@ spec:
         kubernetes.io/ingress.class: nginx
 ```
 
-In **apps/staging/** dir we have a Kustomize patch with the staging specific values:
+In **apps/lb/** dir we have a Kustomize patch with specific values:
 
 ```yaml
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
@@ -155,7 +145,7 @@ spec:
 Note that with ` version: ">=1.0.0-alpha"` we configure Flux to automatically upgrade
 the `HelmRelease` to the latest chart version including alpha, beta and pre-releases.
 
-In **apps/production/** dir we have a Kustomize patch with the production specific values:
+In **apps/appgw/** dir we have a Kustomize patch with the production specific values:
 
 ```yaml
 apiVersion: helm.toolkit.fluxcd.io/v2beta1

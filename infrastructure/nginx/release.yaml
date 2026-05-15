@@ -8,22 +8,21 @@ spec:
   releaseName: nginx-ingress-controller
   chart:
     spec:
-      chart: nginx-ingress-controller
+      chart: ingress-nginx
       sourceRef:
         kind: HelmRepository
-        name: bitnami
+        name: ingress-nginx
         namespace: cluster-config
-      version: "9.x"
+      version: "4.10.1"
   interval: 1h0m0s
   install:
     remediation:
       retries: 3
-  # Default values
-  # https://github.com/bitnami/charts/blob/master/bitnami/nginx-ingress-controller/values.yaml
   values:
-    image:
-      repository: bitnamilegacy/nginx-ingress-controller
-    service:
-      type: NodePort
-    ingressClassResource:
-      name: nginx
+    controller:
+      service:
+        type: NodePort
+      extraArgs:
+        enable-ssl-passthrough: ""
+      admissionWebhooks:
+        enabled: true

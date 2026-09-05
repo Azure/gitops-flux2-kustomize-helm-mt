@@ -26,6 +26,10 @@ resource fluxExtensions 'Microsoft.KubernetesConfiguration/extensions@2022-03-01
   properties: {
     extensionType: 'microsoft.flux'
   }
+  configurationSettings: {
+    'image-automation-controller.enabled': 'true' 
+    'image-reflector-controller.enabled': 'true'
+  }
   scope: managedClusters[i]
 }]
 
